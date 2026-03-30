@@ -4,23 +4,27 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>UP Semiconductor Policy 2024 — Official Policy Assistant</title>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #f5f4f0;
+    --bg: #f2f4f7;
     --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: #d4cfc4;
-    --accent: #1a3a6b;
-    --accent2: #b8860b;
-    --accent-light: #e8edf5;
-    --text: #1a1a1a;
-    --text-muted: #6b6560;
-    --user-bubble: #1a3a6b;
+    --surface2: #eef0f4;
+    --border: #cdd2db;
+    --accent: #0f2d6b;
+    --accent2: #c8960c;
+    --accent-light: #e5eaf4;
+    --text: #111827;
+    --text-muted: #5c6370;
+    --user-bubble: #0f2d6b;
     --bot-bubble: #ffffff;
     --chip-bg: #ffffff;
-    --chip-border: #c8c3b8;
-    --header-bg: #1a3a6b;
+    --chip-border: #c4c9d4;
+    --header-bg: #0d2460;
+    --header-stripe: #0b1f52;
+    --saffron: #FF9933;
+    --india-green: #138808;
+    --navy: #000080;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -33,31 +37,132 @@
     overflow: hidden;
   }
 
-  /* HEADER */
+  /* ═══════════════════════════════════════
+     GOVERNMENT DASHBOARD HEADER
+  ═══════════════════════════════════════ */
+
+  /* Top strip — Tricolour accent bar */
+  .gov-tricolor {
+    height: 4px;
+    background: linear-gradient(to right,
+      var(--saffron) 0% 33.3%,
+      #ffffff 33.3% 66.6%,
+      var(--india-green) 66.6% 100%
+    );
+    flex-shrink: 0;
+  }
+
   header { background: var(--header-bg); flex-shrink: 0; }
-  .header-top {
-    display: flex; align-items: center; gap: 16px;
-    padding: 14px 28px;
-    border-bottom: 3px solid var(--accent2);
+
+  /* Gov utility bar — very top */
+  .gov-utility-bar {
+    background: var(--header-stripe);
+    padding: 4px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
   }
-  .emblem {
-    width: 52px; height: 52px; background: #fff; border-radius: 50%;
+  .gov-utility-bar span {
+    font-size: 10.5px;
+    color: rgba(200,215,240,0.75);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .gov-utility-bar .util-right { display: flex; gap: 18px; align-items: center; }
+  .util-tag {
+    font-size: 9.5px; padding: 2px 8px; border-radius: 2px;
+    font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+  }
+  .util-tag.live { background: #16a34a; color: #fff; }
+  .util-tag.ver  { background: rgba(255,255,255,0.1); color: #a8bdda; border: 1px solid rgba(255,255,255,0.15); }
+
+  /* Main header body */
+  .header-main {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 28px 14px;
+  }
+
+  /* Logo block — Ashoka Chakra SVG + UP emblem */
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+  .emblem-circle {
+    width: 58px; height: 58px;
+    background: #fff;
+    border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 26px; flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 0 0 3px rgba(200,150,12,0.5);
+    flex-shrink: 0;
+    overflow: hidden;
+    padding: 4px;
   }
-  .header-text { flex: 1; }
+  .emblem-circle img { width: 100%; height: 100%; object-fit: contain; }
+  .emblem-circle svg { width: 100%; height: 100%; }
+
+  /* Divider between logos */
+  .logo-divider {
+    width: 1px; height: 44px;
+    background: rgba(255,255,255,0.2);
+    flex-shrink: 0;
+  }
+
+  /* Header text stack */
+  .header-text { flex: 1; min-width: 0; }
+  .header-text .gov-label {
+    font-size: 10px; color: var(--accent2);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .header-text .gov-label::after {
+    content: ''; display: inline-block;
+    width: 32px; height: 1px; background: var(--accent2); opacity: 0.6;
+  }
   .header-text h1 {
     font-family: 'EB Garamond', serif;
-    font-size: 19px; color: #fff; line-height: 1.2;
-    font-weight: 600; letter-spacing: 0.01em;
+    font-size: 21px; color: #fff; line-height: 1.2;
+    font-weight: 700; letter-spacing: 0.01em;
   }
-  .header-text p { font-size: 12px; color: #a8bdda; margin-top: 3px; letter-spacing: 0.03em; text-transform: uppercase; }
-  .header-badges { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
-  .badge { font-size: 10.5px; padding: 3px 10px; border-radius: 3px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
-  .badge-live { background: #16a34a; color: #fff; }
-  .badge-gov  { background: rgba(255,255,255,0.12); color: #c8d8ee; border: 1px solid rgba(255,255,255,0.2); }
-  .header-sub { background: var(--accent2); padding: 5px 28px; font-size: 11px; color: #fff; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+  .header-text .dept-line {
+    font-size: 11.5px; color: #a8bcd8; margin-top: 4px;
+    letter-spacing: 0.03em; font-weight: 400;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dept-dot { display: inline-block; width: 3px; height: 3px; background: var(--accent2); border-radius: 50%; }
+
+  /* Academic project line */
+  .header-academic {
+    background: rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 6px 28px;
+    font-size: 11px;
+    color: rgba(180,200,230,0.8);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-academic .acad-icon { font-size: 12px; opacity: 0.7; }
+  .header-academic em { font-style: normal; color: var(--accent2); font-weight: 600; }
+  .header-academic .sep { color: rgba(255,255,255,0.2); margin: 0 4px; }
+
+  /* Sub bar */
+  .header-sub {
+    background: var(--accent2);
+    padding: 5px 28px;
+    font-size: 10.5px; color: #fff;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .header-sub .sub-dot { display: inline-block; width: 4px; height: 4px; background: rgba(255,255,255,0.5); border-radius: 50%; }
 
   /* CHAT */
   #chat-container {
@@ -154,19 +259,53 @@
 </head>
 <body>
 
+<!-- Tricolour top bar -->
+<div class="gov-tricolor"></div>
+
 <header>
-  <div class="header-top">
-    <div class="emblem">🏛️</div>
-    <div class="header-text">
-      <h1>UP Semiconductor Policy 2024 — Official Policy Assistant</h1>
-      <p>Department of IT &amp; Electronics · Government of Uttar Pradesh</p>
-    </div>
-    <div class="header-badges">
-      <span class="badge badge-live">● Live</span>
-      <span class="badge badge-gov">Powered by Gemini AI</span>
+  <!-- Utility bar -->
+  <div class="gov-utility-bar">
+    <span>Government of Uttar Pradesh &nbsp;|&nbsp; Official Policy Portal</span>
+    <div class="util-right">
+      <span class="util-tag live">● Live</span>
+      <span class="util-tag ver">Powered by Gemini AI</span>
     </div>
   </div>
-  <div class="header-sub">Invest UP &nbsp;·&nbsp; Nivesh Mitra &nbsp;·&nbsp; UPLC &nbsp;·&nbsp; For Informational Purposes Only</div>
+
+  <!-- Main header -->
+  <div class="header-main">
+    <!-- Title text -->
+    <div class="header-text">
+      <div class="gov-label">Official Policy Assistant</div>
+      <h1>UP Semiconductor Policy 2024</h1>
+      <div class="dept-line">
+        <span>Department of IT &amp; Electronics</span>
+        <span class="dept-dot"></span>
+        <span>Government of Uttar Pradesh</span>
+        <span class="dept-dot"></span>
+        <span>Invest UP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Academic project line -->
+  <div class="header-academic">
+    <span class="acad-icon">📋</span>
+    <span>
+      An Academic Project Submitted in Partial Fulfilment of the Requirements for the Course
+      <em>Business Law (Term VI)</em>
+      <span class="sep">|</span>
+      Submitted by <em>Pragati Verma</em>
+    </span>
+  </div>
+
+  <!-- Sub bar -->
+  <div class="header-sub">
+    Invest UP <span class="sub-dot"></span>&nbsp;
+    Nivesh Mitra <span class="sub-dot"></span>&nbsp;
+    UPLC <span class="sub-dot"></span>&nbsp;
+    For Informational Purposes Only
+  </div>
 </header>
 
 <div id="chat-container"></div>
@@ -313,7 +452,7 @@ function renderWelcome() {
     </div>`;
   container.appendChild(card);
   setTimeout(() => {
-    addMessage('bot', `Good day. I am the **UP Semiconductor Policy 2024 Official Assistant**, deployed by the Department of IT & Electronics, Government of Uttar Pradesh.\n\nI am here to assist you with queries related to the **Uttar Pradesh Semiconductor Policy 2024** — including eligibility criteria, financial incentives, land allotment, the Nivesh Mitra single-window clearance process, and contact details for nodal agencies.\n\nPlease type your question below or select a topic from the frequently asked questions above.`);
+    addMessage('bot', `Good day. I am the **UP Semiconductor Policy 2024 Official Assistant**.\n\nI am here to assist you with queries related to the **Uttar Pradesh Semiconductor Policy 2024** — including eligibility criteria, financial incentives, land allotment, the Nivesh Mitra single-window clearance process, and contact details for nodal agencies.\n\nPlease type your question below or select a topic from the frequently asked questions above.`);
   }, 300);
 }
 
