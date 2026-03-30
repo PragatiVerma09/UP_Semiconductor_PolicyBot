@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>UP Semiconductor Policy 2024 — Official Policy Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: #d4cfc4;
+    --accent: #1a3a6b;
+    --accent2: #b8860b;
+    --accent-light: #e8edf5;
+    --text: #1a1a1a;
+    --text-muted: #6b6560;
+    --user-bubble: #1a3a6b;
+    --bot-bubble: #ffffff;
+    --chip-bg: #ffffff;
+    --chip-border: #c8c3b8;
+    --header-bg: #1a3a6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HEADER */
+  header { background: var(--header-bg); flex-shrink: 0; }
+  .header-top {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 28px;
+    border-bottom: 3px solid var(--accent2);
+  }
+  .emblem {
+    width: 52px; height: 52px; background: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .header-text { flex: 1; }
+  .header-text h1 {
+    font-family: 'EB Garamond', serif;
+    font-size: 19px; color: #fff; line-height: 1.2;
+    font-weight: 600; letter-spacing: 0.01em;
+  }
+  .header-text p { font-size: 12px; color: #a8bdda; margin-top: 3px; letter-spacing: 0.03em; text-transform: uppercase; }
+  .header-badges { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+  .badge { font-size: 10.5px; padding: 3px 10px; border-radius: 3px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  .badge-live { background: #16a34a; color: #fff; }
+  .badge-gov  { background: rgba(255,255,255,0.12); color: #c8d8ee; border: 1px solid rgba(255,255,255,0.2); }
+  .header-sub { background: var(--accent2); padding: 5px 28px; font-size: 11px; color: #fff; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+
+  /* CHAT */
+  #chat-container {
+    flex: 1; overflow-y: auto; padding: 24px 20px;
+    display: flex; flex-direction: column; gap: 16px;
+    scroll-behavior: smooth; background: var(--bg);
+  }
+  #chat-container::-webkit-scrollbar { width: 6px; }
+  #chat-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* MESSAGES */
+  .msg { display: flex; gap: 10px; max-width: 860px; margin: 0 auto; width: 100%; animation: fadeUp 0.25s ease; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .msg.user { flex-direction: row-reverse; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; }
+  .msg.bot  .avatar { background: var(--accent); color: #fff; font-size: 17px; }
+  .msg.user .avatar { background: var(--accent2); color: #fff; font-size: 11px; }
+  .bubble { padding: 13px 18px; font-size: 14px; line-height: 1.7; max-width: calc(100% - 50px); }
+  .msg.bot .bubble {
+    background: var(--bot-bubble); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); color: var(--text);
+    border-radius: 0 4px 4px 0;
+  }
+  .msg.user .bubble { background: var(--user-bubble); color: #e8f0fb; border-radius: 4px 0 0 4px; }
+  .bubble strong { color: var(--accent); font-weight: 600; }
+  .msg.user .bubble strong { color: #93c5fd; }
+  .bubble ul { padding-left: 20px; margin: 6px 0; }
+  .bubble li { margin-bottom: 5px; }
+  .bubble p + p { margin-top: 8px; }
+  .bubble h3 { font-family: 'EB Garamond', serif; color: var(--accent); font-size: 16px; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  .bubble hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+  .bubble em { color: var(--text-muted); font-style: italic; font-size: 12.5px; }
+
+  /* TYPING */
+  .typing-bubble {
+    background: var(--bot-bubble); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0;
+    padding: 14px 18px; display: flex; gap: 5px; align-items: center;
+  }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: bounce 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+  /* CHIPS */
+  #suggestions { padding: 8px 20px 4px; display: flex; flex-wrap: wrap; gap: 7px; max-width: 900px; margin: 0 auto; width: 100%; }
+  .chip { background: var(--chip-bg); border: 1px solid var(--chip-border); color: var(--accent); font-size: 12px; padding: 5px 13px; border-radius: 2px; cursor: pointer; transition: all 0.18s; font-family: 'Source Sans 3', sans-serif; font-weight: 500; }
+  .chip:hover { background: var(--accent-light); border-color: var(--accent); }
+
+  /* INPUT */
+  #input-area { border-top: 2px solid var(--accent); background: var(--surface); padding: 14px 20px; flex-shrink: 0; }
+  #input-row { display: flex; gap: 10px; max-width: 860px; margin: 0 auto; align-items: flex-end; }
+  #user-input {
+    flex: 1; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 3px; color: var(--text); font-size: 14px;
+    font-family: 'Source Sans 3', sans-serif; padding: 11px 15px;
+    resize: none; outline: none; min-height: 44px; max-height: 130px; line-height: 1.5; transition: border-color 0.2s;
+  }
+  #user-input:focus { border-color: var(--accent); background: #fff; }
+  #user-input::placeholder { color: #9e9890; }
+  #send-btn {
+    height: 44px; padding: 0 20px; background: var(--accent); border: none; border-radius: 3px;
+    color: #fff; cursor: pointer; font-size: 13px; font-weight: 600;
+    font-family: 'Source Sans 3', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;
+    flex-shrink: 0; transition: background 0.2s;
+  }
+  #send-btn:hover { background: #122d56; }
+  #send-btn:disabled { background: #9aabb8; cursor: not-allowed; }
+  #input-hint { font-size: 10.5px; color: var(--text-muted); text-align: center; margin-top: 7px; max-width: 860px; margin-left: auto; margin-right: auto; }
+
+  /* WELCOME CARD */
+  .welcome-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-top: 4px solid var(--accent); border-radius: 3px;
+    padding: 24px 28px; max-width: 860px; margin: 0 auto; width: 100%;
+  }
+  .welcome-card h2 { font-family: 'EB Garamond', serif; font-size: 22px; color: var(--accent); margin-bottom: 8px; }
+  .welcome-card > p { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; margin-bottom: 18px; }
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .faq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+  .faq-btn {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 3px;
+    padding: 10px 14px; font-size: 12.5px; color: var(--text); cursor: pointer;
+    text-align: left; transition: all 0.18s; font-family: 'Source Sans 3', sans-serif; line-height: 1.4;
+  }
+  .faq-btn:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+  .faq-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .faq-label { font-size: 9.5px; color: var(--accent2); font-weight: 700; display: block; margin-bottom: 3px; letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="emblem">🏛️</div>
+    <div class="header-text">
+      <h1>UP Semiconductor Policy 2024 — Official Policy Assistant</h1>
+      <p>Department of IT &amp; Electronics · Government of Uttar Pradesh</p>
+    </div>
+    <div class="header-badges">
+      <span class="badge badge-live">● Live</span>
+      <span class="badge badge-gov">Powered by Gemini AI</span>
+    </div>
+  </div>
+  <div class="header-sub">Invest UP &nbsp;·&nbsp; Nivesh Mitra &nbsp;·&nbsp; UPLC &nbsp;·&nbsp; For Informational Purposes Only</div>
+</header>
+
+<div id="chat-container"></div>
+<div id="suggestions"></div>
+
+<div id="input-area">
+  <div id="input-row">
+    <textarea id="user-input" rows="1" placeholder="Type your question about UP Semiconductor Policy 2024…"></textarea>
+    <button id="send-btn" onclick="sendMessage()">Submit ➤</button>
+  </div>
+  <p id="input-hint">Press Enter to submit &nbsp;·&nbsp; Shift+Enter for new line &nbsp;·&nbsp; This assistant is for informational purposes only and does not constitute legal or financial advice.</p>
+</div>
+
+<script>
+// ── PASTE YOUR GEMINI API KEY BETWEEN THE QUOTES BELOW ──────────
+const GEMINI_API_KEY = 'AIzaSyAxDyEqq3_hLfddAp7ufwEtNhOcx9u2cwU';
+// ────────────────────────────────────────────────────────────────
+
+const SYSTEM_PROMPT = `You are an expert Policy Assistant for the Uttar Pradesh Semiconductor Policy 2024. Your role is to help entrepreneurs, industrialists, investors, and businessmen understand this policy. Always maintain a formal, professional tone befitting an official government policy assistant.
+
+CORE KNOWLEDGE BASE — UP SEMICONDUCTOR POLICY 2024:
+
+POLICY OVERVIEW:
+- Notified: February 12, 2024 by Government of Uttar Pradesh
+- Nodal Agency: UP Electronics Corporation Limited (UPLC) / Department of IT & Electronics
+- Investment Promotion: Invest UP (invest.up.gov.in)
+- Objective: Position UP as a global semiconductor manufacturing hub; attract domestic & foreign investment; align with Atmanirbhar Bharat
+
+ELIGIBLE UNITS:
+- Semiconductor Fabrication (FAB) units
+- ATMP/OSAT units (Assembly, Testing, Marking & Packaging)
+- Display Fab units
+- Compound Semiconductor units
+- R&D Centres and Centres of Excellence (CoEs)
+- Investments >= Rs 3,000 crore: special incentives on case-to-case basis
+
+FINANCIAL INCENTIVES:
+1. Capital Subsidy: 50% additional on top of GOI/MeitY approved subsidy
+2. Interest Subsidy: 5% per annum for 7 years (max Rs 1 Cr/year); for units up to Rs 200 Cr investment
+3. Land Rebate: 75% on first 200 acres; 30% beyond (ATMP/OSAT units)
+4. Stamp Duty: 100% exemption on purchase/lease of land
+5. Electricity Duty: 100% exemption for 10 years
+6. SGST: 100% net SGST exemption for 10 years
+7. EPF: 100% reimbursement for UP domicile employees (max Rs 2,000/month/employee)
+8. Electricity Tariff Relief: Rs 2/unit for 10 years
+9. Dual Power Grid: FAB units; one grid cost reimbursed by Dept. of IT & Electronics
+10. Transmission/Wheeling Charges: 50% discount for 25 years
+11. Patent Fee Reimbursement: domestic and international patents
+12. Skilling Support: up to Rs 1 crore, one-time, up to 12 months
+13. Water Charges: concessions for eligible units
+
+NON-FISCAL INCENTIVES:
+- Single Window via Nivesh Mitra (niveshmitra.up.nic.in) — being upgraded to 3.0
+- 24x7 three-shift operations permitted
+- Women may be employed in all shifts with safety provisions
+- Self-certification for eligible compliances
+- Non-disturbance provision for business continuity
+- Mission-critical infrastructure by State
+
+KEY LOCATIONS:
+- YEIDA (Yamuna Expressway Industrial Development Authority): 500 acres earmarked
+- Yamuna Expressway Electronics Manufacturing Cluster
+- Ecotech, Greater Noida
+- Bundelkhand Industrial Development Authority (BIDA)
+- NOIDA Electronics City
+
+APPLICATION PROCESS:
+1. Visit Nivesh Mitra: niveshmitra.up.nic.in
+2. Register as investor/company
+3. Submit Expression of Interest (EoI)
+4. PMU under UPLC/DITE assigned as nodal contact
+5. For >= Rs 3,000 Cr: contact Invest UP directly at invest.up.gov.in
+6. All clearances via single window
+7. Land allotment via YEIDA/BIDA/NOIDA authorities
+
+CONTACT:
+- Invest UP: invest.up.gov.in
+- UPLC: uplc.up.gov.in
+- Dept. of IT & Electronics, Govt. of UP
+- Nivesh Mitra: niveshmitra.up.nic.in
+
+RESPONSE STYLE: Formal, professional, structured. Use bullet points for lists. Cite relevant sections. Direct to nodal agency if outside scope.`;
+
+const OFFLINE_KB = {
+  "subsid": `**Subsidies under UP Semiconductor Policy 2024:**\n\n**Capital Subsidy:** 50% additional capital subsidy on top of GOI/MeitY approved subsidy.\n\n**Interest Subsidy:** 5% per annum for 7 years (max ₹1 Cr/year) on loans from scheduled banks.\n\n**Land Rebate:** 75% on first 200 acres; 30% beyond (ATMP/OSAT units).\n\n**SGST Exemption:** 100% for 10 years.\n\n**Electricity Duty:** 100% exemption for 10 years.\n\n**Stamp Duty:** 100% exemption.\n\n**EPF Reimbursement:** 100% for UP domicile employees (max ₹2,000/month).\n\n**Electricity Tariff Relief:** ₹2/unit for 10 years.\n\n**Transmission Charges:** 50% discount for 25 years.`,
+  "eligib": `**Eligibility — UP Semiconductor Policy 2024:**\n\n- Semiconductor FAB units\n- ATMP/OSAT units\n- Display FAB units\n- Compound Semiconductor units\n- R&D Centres and Centres of Excellence\n\nInvestments of **₹3,000 crore or more** receive special incentives evaluated case-by-case.`,
+  "apply": `**Application Process:**\n\n1. Visit **Nivesh Mitra**: niveshmitra.up.nic.in\n2. Register as investor/company\n3. Submit **Expression of Interest (EoI)**\n4. **PMU** under UPLC/DITE assigned as nodal contact\n5. For ≥ ₹3,000 Cr: contact **Invest UP** at invest.up.gov.in\n6. All clearances via single window\n7. Land allotment via YEIDA/BIDA/NOIDA authorities`,
+  "land": `**Land Availability & Rebates:**\n\n**Rebate:** 75% on first 200 acres; 30% beyond (ATMP/OSAT)\n\n**Locations:**\n- YEIDA — 500 acres earmarked\n- Yamuna Expressway Electronics Cluster\n- Ecotech, Greater Noida\n- BIDA (Bundelkhand)\n- NOIDA Electronics City`,
+  "electr": `**Electricity Benefits:**\n\n- **100% electricity duty exemption** for 10 years\n- **₹2/unit tariff relief** for 10 years\n- **50% discount on wheeling/transmission charges** for 25 years\n- **Dual power grid** for FAB units (one grid cost reimbursed)\n- Green energy and power banking permitted`,
+  "single": `**Single Window Clearance — Nivesh Mitra:**\n\n- Platform: **niveshmitra.up.nic.in** (upgrading to 3.0)\n- All regulatory approvals, licenses, and clearances in one portal\n- Dedicated **PMU** assigned per investor\n- Departments: Environment, Building, Labour, Power, Fire NOC, and more`,
+  "sgst": `**SGST Exemption:**\n\n- **100% exemption on net SGST**\n- Duration: **10 years** from commercial commencement\n- Applicable to all eligible semiconductor units`,
+  "contact": `**Contact / Nodal Agencies:**\n\n- **Invest UP:** invest.up.gov.in\n- **UPLC:** uplc.up.gov.in\n- **Dept. of IT & Electronics, Govt. of UP**\n- **Nivesh Mitra:** niveshmitra.up.nic.in`,
+  "24": `**24×7 Operations:**\n\n- Round-the-clock, three-shift operations permitted\n- Women may work all shifts with safety arrangements\n- Essential for continuous semiconductor fab operations`,
+  "interest": `**Interest Subsidy:**\n\n- Rate: **5% per annum** | Duration: **7 years**\n- For units with investment up to **₹200 Crore**\n- Cap: **₹1 Crore per annum per unit**\n- On loans from scheduled banks or financial institutions`,
+  "train": `**Skilling & Training Support:**\n\n- Up to **₹1 crore** one-time financial assistance\n- Duration: up to **12 months** for international expertise\n- Supports R&D Centres and Centres of Excellence`,
+  "patent": `**Patent Fee Reimbursement:**\n\n- Reimbursement of **domestic and international patent** fees\n- Encourages innovation and IP creation`,
+  "epf": `**EPF Reimbursement:**\n\n- **100% reimbursement** of EPF contributions\n- For **UP domicile employees** only\n- Max: **₹2,000 per month per employee**`,
+};
+
+function offlineFallback(q) {
+  const ql = q.toLowerCase();
+  for (const [k, v] of Object.entries(OFFLINE_KB)) { if (ql.includes(k)) return v; }
+  return `Thank you for your query. I can assist with the following topics under the **UP Semiconductor Policy 2024**:\n\n- Subsidies and financial incentives\n- Eligibility criteria\n- Application process (Single Window / Nivesh Mitra)\n- Land locations and rebates\n- Electricity and tax benefits\n- Contact information for nodal agencies\n\nPlease rephrase your question or select one of the suggested topics.`;
+}
+
+let apiKey = GEMINI_API_KEY;
+let messages = [];
+let isLoading = false;
+
+const SUGGESTIONS = [
+  "What subsidies am I eligible for?",
+  "How do I apply via single window?",
+  "Land rebate for ATMP units?",
+  "Electricity duty exemption details",
+  "Interest subsidy — duration & cap",
+  "How to contact Invest UP?",
+  "24×7 operations rules",
+  "SGST exemption period",
+];
+
+const FAQS = [
+  { label: "Subsidies",       q: "What capital and interest subsidies does the UP Semiconductor Policy offer?" },
+  { label: "Land & Locations",q: "What land rebates and locations are available for semiconductor units?" },
+  { label: "Eligibility",     q: "Who is eligible to apply under UP Semiconductor Policy 2024?" },
+  { label: "How to Apply",    q: "What is the step-by-step application process under the UP Semiconductor Policy?" },
+  { label: "Electricity",     q: "What electricity-related incentives does the policy provide?" },
+  { label: "Tax Exemptions",  q: "What tax exemptions are available — SGST, stamp duty, electricity duty?" },
+  { label: "Training Support",q: "Is there financial support for employee skilling and training?" },
+  { label: "Contact / Nodal", q: "How do I contact Invest UP or the nodal agency for this policy?" },
+];
+
+window.onload = () => { renderWelcome(); renderSuggestions(); };
+
+function renderWelcome() {
+  const container = document.getElementById('chat-container');
+  const card = document.createElement('div');
+  card.className = 'welcome-card';
+  card.innerHTML = `
+    <h2>🏛️ Welcome to the UP Semiconductor Policy 2024 Assistant</h2>
+    <p>This official policy assistant is designed to help investors, entrepreneurs, and industrialists navigate the <strong>Uttar Pradesh Semiconductor Policy 2024</strong>, notified on February 12, 2024 by the Government of Uttar Pradesh. Ask questions about incentives, eligibility, land availability, the Nivesh Mitra single-window clearance process, and more.</p>
+    <div class="section-label">Frequently Asked Questions</div>
+    <div class="faq-grid">
+      ${FAQS.map(f => `<button class="faq-btn" onclick="askFaq(this,'${escQ(f.q)}')"><span class="faq-label">${f.label}</span>${f.q}</button>`).join('')}
+    </div>`;
+  container.appendChild(card);
+  setTimeout(() => {
+    addMessage('bot', `Good day. I am the **UP Semiconductor Policy 2024 Official Assistant**, deployed by the Department of IT & Electronics, Government of Uttar Pradesh.\n\nI am here to assist you with queries related to the **Uttar Pradesh Semiconductor Policy 2024** — including eligibility criteria, financial incentives, land allotment, the Nivesh Mitra single-window clearance process, and contact details for nodal agencies.\n\nPlease type your question below or select a topic from the frequently asked questions above.`);
+  }, 300);
+}
+
+function escQ(s) { return s.replace(/'/g, "\\'"); }
+
+function askFaq(btn, q) {
+  btn.closest('.welcome-card')?.querySelectorAll('.faq-btn').forEach(b => b.disabled = true);
+  submitQuestion(q);
+}
+
+function renderSuggestions() {
+  document.getElementById('suggestions').innerHTML =
+    SUGGESTIONS.map(s => `<button class="chip" onclick="chipClick('${escQ(s)}')">${s}</button>`).join('');
+}
+function chipClick(q) { submitQuestion(q); }
+
+function addMessage(role, text) {
+  const container = document.getElementById('chat-container');
+  const msg = document.createElement('div');
+  msg.className = `msg ${role}`;
+  msg.innerHTML = `<div class="avatar">${role === 'bot' ? '🏛' : 'You'}</div><div class="bubble">${formatText(text)}</div>`;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function addTyping() {
+  const container = document.getElementById('chat-container');
+  const msg = document.createElement('div');
+  msg.className = 'msg bot'; msg.id = 'typing-msg';
+  msg.innerHTML = `<div class="avatar">🏛</div><div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+function removeTyping() { document.getElementById('typing-msg')?.remove(); }
+
+function formatText(t) {
+  t = t.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+  t = t.replace(/^(?:\*|-)\s+(.+)$/gm, '<li>$1</li>');
+  t = t.replace(/(<li>[\s\S]*?<\/li>)+/g, m => `<ul>${m}</ul>`);
+  t = t.replace(/^\d+\.\s+(.+)$/gm, '<li>$1</li>');
+  t = t.replace(/^---$/gm, '<hr>');
+  t = t.replace(/\*((?!\*)[^*]+)\*/g, '<em>$1</em>');
+  return t.split(/\n\n+/).map(p => p.startsWith('<') ? p : `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+}
+
+async function callGemini(userMessage) {
+  const contents = [...messages.slice(-20).map(m => ({
+    role: m.role === 'bot' ? 'model' : 'user', parts: [{ text: m.text }]
+  })), { role: 'user', parts: [{ text: userMessage }] }];
+
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ system_instruction:{parts:[{text:SYSTEM_PROMPT}]}, contents, generationConfig:{temperature:0.3,maxOutputTokens:1024} }) }
+    );
+    if (!res.ok) { console.warn(await res.json().catch(()=>{})); return offlineFallback(userMessage); }
+    const data = await res.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Unable to generate a response. Please try again.';
+  } catch(e) {
+    return offlineFallback(userMessage);
+  }
+}
+
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+  input.value = ''; input.style.height = 'auto';
+  submitQuestion(text);
+}
+
+async function submitQuestion(text) {
+  if (!text || isLoading) return;
+  isLoading = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('suggestions').innerHTML = '';
+  addMessage('user', text);
+  messages.push({ role:'user', text });
+  addTyping();
+  const reply = await callGemini(text);
+  removeTyping();
+  addMessage('bot', reply);
+  messages.push({ role:'bot', text: reply });
+  isLoading = false;
+  document.getElementById('send-btn').disabled = false;
+  renderSuggestions();
+}
+
+document.getElementById('user-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+document.getElementById('user-input').addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 130) + 'px';
+});
+</script>
+</body>
+</html>
